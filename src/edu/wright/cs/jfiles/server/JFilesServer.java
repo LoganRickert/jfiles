@@ -250,12 +250,20 @@ public class JFilesServer implements Runnable {
 					listCmd(dir, out);
 					break;
 				case "FIND":
+					while (!(isValid(baseCommand))) { //loop used to make sure command is used right
+						out.write("Invalid Entry, Please re-enter what you want to find" + "\n");
+						cmd = in.readLine();
+						//baseCommand = cmd.split(" ");  this is commented until a bug is fixed #57
+					}
 					findCmd(dir, out, baseCommand[1].toLowerCase(Locale.ENGLISH));
 					break;
 				case "FINDR":
+					while (!(isValid(baseCommand))) {
+						out.write("Invalid Entry, Please re-enter what you want to find" + "\n");
+						cmd = in.readLine();
+						//baseCommand = cmd.split(" ");
+					}
 					recursiveFindCmd(dir, out, baseCommand[1].toLowerCase(Locale.ENGLISH));
-					break;
-				case "FILE":
 					break;
 				case "EXIT":
 					try {
@@ -284,6 +292,21 @@ public class JFilesServer implements Runnable {
 			// TODO AUto-generated catch block
 			// e.printStackTrace();
 			logger.error("Some error occured", e);
+		}
+	}
+	
+	/**
+	 * Check to see if the command that requires input is valid.
+	 * 
+	 * @command is the command entered from user to decide what to do.
+	 * 
+	 */
+	boolean isValid(String[] command) {
+		if (command.length <= 1) { //used for handling invalid error
+			logger.error("Invalid Input, nothing to find");
+			return false;
+		} else {
+			return true;
 		}
 	}
 
